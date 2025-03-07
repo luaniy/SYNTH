@@ -1,1 +1,31 @@
-a
+Idea: Web or app based synth
+Goal: Can take in input sound, repitch it to match the pitches of a half of a half grand piano, and make it playable with a computer keyboard. Ex: if shantanu or kegan played their respective instruments, we would be able to reconstruct at least two octaves worth of sounds
+
+Tools:
+Python
+VS Code
+GitHub
+Devlog or something
+Computer keyboard
+
+Hackathon Info:
+6:00pm start on Friday 3/6
+Submission by Saturday 3/7 
+
+Python Libraries (Testing):
+pip install numpy scipy sounddevice pyaudio audiolazy python-rtmidi PyQt5
+
+GUI libraries:
+Tkinter - really easy to use but very old
+Dearpygui - okay, weird middle ground between 
+Pyqt - written like C++, but the best one
+t
+Audio libraries:
+pyaudio
+Scikitsound
+Librosa - for analysis
+Base python audio library?
+Pygame
+
+
+Look into multicore stuff if high latency, but unlikely to gain any significant efficiencies
