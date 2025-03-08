@@ -36,3 +36,9 @@ Pygame
 Look into multicore stuff if high latency, but unlikely to gain any significant efficiencies
 
 https://mixbutton.com/music-tools/frequency-and-pitch/music-note-to-frequency-chart 
+
+
+
+Hello, our team name is the Synthesizers! I’m Shantanu, this is Shrey, and this is Kegan. We’re all freshmen here at Clemson, and we made a synth that can be played on laptops such as this! I worked mostly on the organizational aspects, Shrey worked heavily on the octave switching feature, and Kegan did the brunt of the wave generation code. The purpose of this project is to give people who otherwise would not have access to a keyboard the ability to play music for fun. Additionally, we intend to opensource this code, and given it runs locally and offline, we hope it could help people who want to learn music.
+The tech-stack consists mostly entirely of Python code written using VS Code. 
+If we had more time we would implement a GUI, audio input, and recording features to export music.

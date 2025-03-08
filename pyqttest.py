@@ -65,10 +65,3 @@ window = Window()
 
 # start the app
 sys.exit(App.exec())
-
-'''
-f1 - f4 soundfonts
-f5 start/stop recording
-f6 playback
-f7 reset
-'''
