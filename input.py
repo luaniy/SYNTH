@@ -1,5 +1,4 @@
-#Input keyboard testing
-
 import keyboard
 
-keyboard.add_hotkey('page up, page down', lambda: keyboard.write('foobar'))
+if __name__ == "__main__":
+    keyboard.add_hotkey('page up, page down', lambda: keyboard.write('foobar'))
