@@ -33,12 +33,8 @@ white_keys.update(dict(zip(white_lower_keys, white_frequencies[:10])))
 white_keys.update(dict(zip(white_upper_keys, white_frequencies[10:])))
 
 # Black keys: groups as specified
-black_group1 = list("sd")           # 2 keys: C#3, D#3
-black_group2 = list("ghj")          # 3 keys: F#3, G#3, A#3
-black_group3 = list("l;")           # 2 keys: C#4, D#4
-black_group4 = list("234")          # 3 keys: F#4, G#4, A#4
-black_group5 = list("67")           # 2 keys: C#5, D#5
-black_group6 = list("90-")          # 3 keys: F#5, G#5, A#5
+black_lower_keys = list("sdghjl;") # 7 keys
+black_upper_keys = list("2346790-") # 8 keys
 
 # Frequencies for 15 black keys spanning three octaves
 black_frequencies = [
@@ -51,11 +47,8 @@ black_frequencies = [
 ]
 
 black_keys = {}
-index = 0
-for group in [black_group1, black_group2, black_group3, black_group4, black_group5, black_group6]:
-    n = len(group)
-    black_keys.update(dict(zip(group, black_frequencies[index:index+n])))
-    index += n
+black_keys.update(dict(zip(black_lower_keys, black_frequencies[:10])))
+black_keys.update(dict(zip(black_upper_keys, black_frequencies[7:])))
 
 # Combine white and black keys
 KEY_FREQUENCIES = {}
