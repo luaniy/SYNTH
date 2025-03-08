@@ -2,7 +2,6 @@ import numpy as np
 import sounddevice as sd
 from pynput import keyboard
 import sys
-import threading
 
 
 # ----------------------------
