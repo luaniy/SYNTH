@@ -27,6 +27,11 @@ Librosa - for analysis
 Base python audio library?
 Pygame
 
+0-52:Cos
+53-105:Triangle
+106-158:Square
+159-211:Saw
+
 
 Look into multicore stuff if high latency, but unlikely to gain any significant efficiencies
 
