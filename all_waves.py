@@ -2,6 +2,12 @@ import numpy as np
 import sounddevice as sd
 from pynput import keyboard
 import sys
+import time
+import threading
+
+recording = []
+is_recording = False
+playback_thread = None
 
 # ----------------------------
 # Configuration and Constants
@@ -198,43 +204,81 @@ def cosine_change ():
 active_notes = {}
 
 def on_press(key):
-    global active_notes, listener
-    # Use ESC to exit the program
+    global active_notes, listener, is_recording, recording
     if key == keyboard.Key.esc:
         listener.stop()
         return False
     if key == keyboard.Key.f1:
-        print("f1 pressed")
-        saw_change ()
+        print("f1 pressed - Saw wave")
+        saw_change()
     if key == keyboard.Key.f2:
-        print("f2 pressed")
-        square_change ()
+        print("f2 pressed - Square wave")
+        square_change()
     if key == keyboard.Key.f3:
-        print("f3 pressed")
-        triangle_change ()
+        print("f3 pressed - Triangle wave")
+        triangle_change()
     if key == keyboard.Key.f4:
-        print("f4 pressed")
-        cosine_change ()
+        print("f4 pressed - Cosine wave")
+        cosine_change()
+    if key == keyboard.Key.f5:  # Start/Stop Recording
+        is_recording = not is_recording
+        print("Recording started" if is_recording else "Recording stopped")
+        if not is_recording:
+            print(f"Recorded {len(recording)} notes.")
+    if key == keyboard.Key.f6:  # Playback Recording
+        if recording:
+            print("Playing back recorded notes...")
+            play_back()
+        else:
+            print("No recorded notes to play back.")
     try:
         if hasattr(key, 'char'):
             k = key.char.lower()
             if k in KEY_FREQUENCIES and k not in active_notes:
-                active_notes[k] = 0  # Start playback from the beginning
+                active_notes[k] = 0
+                if is_recording:
+                    recording.append((k, time.time(), "press"))  # Store key press
     except Exception as e:
         print(e)
 
 def on_release(key):
+    global recording
     try:
         if hasattr(key, 'char'):
             k = key.char.lower()
             if k in active_notes:
                 del active_notes[k]
+                if is_recording:
+                    recording.append((k, time.time(), "release"))  # Store key release
     except Exception as e:
         print(e)
 
 # ----------------------------
 # Audio Callback and Stream
 # ----------------------------
+def play_back():
+    global playback_thread
+    if playback_thread and playback_thread.is_alive():
+        print("Playback already running.")
+        return
+
+    def playback_function():
+        if not recording:
+            print("No recorded notes to play.")
+            return
+        start_time = recording[0][1]  # First note's timestamp
+        active_playback_notes = {}  # Store active notes separately
+        for note, timestamp, action in recording:
+            time.sleep(timestamp - start_time)  # Wait for the correct timing
+            start_time = timestamp  # Update reference time
+            if action == "press":
+                active_playback_notes[note] = 0  # Add to playback notes
+            elif action == "release" and note in active_playback_notes:
+                del active_playback_notes[note]  # Remove from playback notes
+
+    playback_thread = threading.Thread(target=playback_function)
+    playback_thread.start()
+
 def audio_callback(outdata, frames, time_info, status):
     if status:
         print(status, file=sys.stderr)
