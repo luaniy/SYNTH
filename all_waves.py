@@ -65,6 +65,8 @@ KEY_FREQUENCIES.update(black_keys)
 # ----------------------------
 # Waveform Generation
 # ----------------------------
+
+# Saw Wave Calculations
 def generate_saw_wave(freq, sample_rate, duration, fade_in_duration, fade_out_duration):
     """
     Generate a saw wave with a given frequency and duration.
@@ -89,6 +91,7 @@ def generate_saw_wave(freq, sample_rate, duration, fade_in_duration, fade_out_du
         
     return wave.astype(np.float32)
 
+# Square Wave Calculations
 def generate_square_wave(freq, sample_rate, duration, fade_in_duration, fade_out_duration):
     """
     Generate a square wave with a given frequency and duration.
@@ -113,6 +116,51 @@ def generate_square_wave(freq, sample_rate, duration, fade_in_duration, fade_out
         
     return wave.astype(np.float32)
 
+# Triangle Wave Calculations
+def generate_triangle_wave(freq, sample_rate, duration, fade_in_duration, fade_out_duration):
+    """
+    Generate a triangle wave with a given frequency and duration.
+    The wave has a linear rise and fall.
+    Fade-in and fade-out envelopes are applied to smooth the transitions.
+    Returns a float32 NumPy array.
+    """
+    t = np.linspace(0, duration, int(sample_rate * duration), endpoint=False)
+    # Create a triangle wave: ramps up and then ramps down.
+    wave = 2 * np.abs(2 * (t * freq - np.floor(t * freq + 0.5))) - 1
+    
+    # Apply fade-in
+    fade_in_samples = int(fade_in_duration * sample_rate)
+    if fade_in_samples > 0:
+        fade_in = np.linspace(0, 1, fade_in_samples)
+        wave[:fade_in_samples] *= fade_in
+    # Apply fade-out
+    fade_out_samples = int(fade_out_duration * sample_rate)
+    if fade_out_samples > 0:
+        fade_out = np.linspace(1, 0, fade_out_samples)
+        wave[-fade_out_samples:] *= fade_out
+        
+    return wave.astype(np.float32)
+
+# Cosine Wave Calculations
+def generate_cos_wave(freq, sample_rate, duration, fade_in_duration, fade_out_duration):
+    """
+    Generate a cosine waveform with fade-in and fade-out.
+    Returns a float32 NumPy array.
+    """
+    t = np.linspace(0, duration, int(sample_rate * duration), endpoint=False)
+    wave = 0.5 * np.cos(2 * np.pi * freq * t)
+    # Apply fade-in
+    fade_in_samples = int(fade_in_duration * sample_rate)
+    if fade_in_samples > 0:
+        fade_in = np.linspace(0, 1, fade_in_samples)
+        wave[:fade_in_samples] *= fade_in
+    # Apply fade-out
+    fade_out_samples = int(fade_out_duration * sample_rate)
+    if fade_out_samples > 0:
+        fade_out = np.linspace(1, 0, fade_out_samples)
+        wave[-fade_out_samples:] *= fade_out
+    return wave.astype(np.float32)
+
 # Precompute waveforms for every key using saw waves
 precomputed_saw_waves = { key: generate_saw_wave(freq, SAMPLE_RATE, DURATION, FADE_IN_DURATION, FADE_OUT_DURATION)
                       for key, freq in KEY_FREQUENCIES.items() }
@@ -121,17 +169,33 @@ precomputed_saw_waves = { key: generate_saw_wave(freq, SAMPLE_RATE, DURATION, FA
 precomputed_square_waves = { key: generate_square_wave(freq, SAMPLE_RATE, DURATION, FADE_IN_DURATION, FADE_OUT_DURATION)
                       for key, freq in KEY_FREQUENCIES.items() }
 
+precomputed_triangle_waves = { key: generate_triangle_wave(freq, SAMPLE_RATE, DURATION, FADE_IN_DURATION, FADE_OUT_DURATION)
+                      for key, freq in KEY_FREQUENCIES.items() }
+
+precomputed_cos_waves = { key: generate_cos_wave(freq, SAMPLE_RATE, DURATION, FADE_IN_DURATION, FADE_OUT_DURATION)
+                      for key, freq in KEY_FREQUENCIES.items() }
+
 # Default wave
 precomputed_waves = precomputed_saw_waves
 
-def wav_change ():
+def saw_change ():
     global precomputed_waves
     precomputed_waves = precomputed_saw_waves
     return
 
-def wav_change2 ():
+def square_change ():
     global precomputed_waves
     precomputed_waves = precomputed_square_waves
+    return
+
+def triangle_change ():
+    global precomputed_waves
+    precomputed_waves = precomputed_triangle_waves
+    return
+
+def cosine_change ():
+    global precomputed_waves
+    precomputed_waves = precomputed_cos_waves
     return
 
 # ----------------------------
@@ -148,10 +212,16 @@ def on_press(key):
         return False
     if key == keyboard.Key.f1:
         print("f1 pressed")
-        wav_change ()
+        saw_change ()
     if key == keyboard.Key.f2:
         print("f2 pressed")
-        wav_change2 ()
+        square_change ()
+    if key == keyboard.Key.f3:
+        print("f3 pressed")
+        triangle_change ()
+    if key == keyboard.Key.f4:
+        print("f4 pressed")
+        cosine_change ()
     try:
         if hasattr(key, 'char'):
             k = key.char.lower()
