@@ -1,13 +1,11 @@
 
-# importing libraries
-from PyQt5 import QtCore, QtGui
-from PyQt5 import QtWidgets as q
-import PyQt5.Qt
-import PyQt5.QtCore
+from PyQt5.QtWidgets import *
+from PyQt5 import QtCore, QtGui 
+from PyQt5.QtGui import * 
+from PyQt5.QtCore import * 
 import sys
 
-
-class Window(q.QMainWindow):
+class Window(QMainWindow):
     def __init__(self):
         super().__init__()
         # setting title
@@ -22,35 +20,26 @@ class Window(q.QMainWindow):
 
     # method for components
     def UiComponents(self):
-
+        
         # creating a label
-        label = q.QLabel("Synth", self)
+        self.label = QLabel("Current Soundfont: Sawtooth (Default)", self)
         # setting geometry to the label
-        label.setGeometry(100, 150, 200, 50)
-        sine = q.QAction("Sine")
-        if keyPressEvent.key()==Qt.Key_Z:
-            sine.triggered.connect(lambda: label.setText("Sine"))
-
-    def keyPressEvent(self, e):
-        
-        
-        square = q.QAction("Square")
-        triangle = q.QAction("Triangle")
-        sawtooth = q.QAction("Sawtooth")
-
+        self.label.setGeometry(0, 0,500,50)
         
 
-        square.triggered.connect(lambda: label.setText("Square"))
+    def keyPressEvent(self, e:QKeyEvent):
+        if e.key()==Qt.Key_F1:
+            self.label.setText("Current Soundfont: Sawtooth")
+        if e.key()==Qt.Key_F2:
+            self.label.setText("Current Soundfont: Square")
+        if e.key()==Qt.Key_F3:
+            self.label.setText("Current Soundfont: Triangle")
+        if e.key()==Qt.Key_F4:
+            self.label.setText("Current Soundfont: Cosine")
 
-        triangle.triggered.connect(lambda: label.setText("Triangle"))
-
-        sawtooth.triggered.connect(lambda: label.setText("Sawtooth"))
-
-
-        
 
 # create pyqt5 app
-App = q.QApplication(sys.argv)
+App = QApplication(sys.argv)
 
 # create the instance of our Window
 window = Window()
