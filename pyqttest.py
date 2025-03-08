@@ -1,66 +1,57 @@
+
+# importing libraries
+from PyQt5 import QtCore, QtGui
+from PyQt5 import QtWidgets as q
+import PyQt5.Qt
+import PyQt5.QtCore
 import sys
-from PyQt5.QtWidgets import QApplication, QWidget
-from PyQt5.QtCore import Qt
 
-class Example(QWidget):
 
+class Window(q.QMainWindow):
     def __init__(self):
         super().__init__()
-        self.initUI()
-        
-    def initUI(self):
-        self.setGeometry(300, 300, 250, 150)
-        self.setWindowTitle('PyQt events with keyboard') 
+        # setting title
+        self.setWindowTitle("The Synthetizers' Synth")
+        # setting geometry
+        self.setGeometry(100, 100, 500, 400)
+        # calling method
+        self.UiComponents()
+        # showing all the widgets
         self.show()
-        
+
+
+    # method for components
+    def UiComponents(self):
+
+        # creating a label
+        label = q.QLabel("Synth", self)
+        # setting geometry to the label
+        label.setGeometry(100, 150, 200, 50)
+
     def keyPressEvent(self, e):
-        if e.key() == Qt.Key_Z:
-            self.close()
-    def dialog():
-        mbox = QMessageBox()
+        
+        sine = q.QAction("Sine")
+        square = q.QAction("Square")
+        triangle = q.QAction("Triangle")
+        sawtooth = q.QAction("Sawtooth")
 
-        mbox.setText("Your allegiance has been noted")
-        mbox.setDetailedText("You are now a disciple and subject of the all-knowing Guru")
-        mbox.setStandardButtons(QMessageBox.Ok | QMessageBox.Cancel)
-                
-        mbox.exec_()
-    
-if __name__ == '__main__':
-    app = QApplication(sys.argv)
-    ex = Example()
-    sys.exit(app.exec_())
+        if e.key()==Qt
+        sine.triggered.connect(lambda: label.setText("Sine"))
 
+        square.triggered.connect(lambda: label.setText("Square"))
+
+        triangle.triggered.connect(lambda: label.setText("Triangle"))
+
+        sawtooth.triggered.connect(lambda: label.setText("Sawtooth"))
 
 
-# import sys
-# from PyQt5.QtWidgets import QApplication, QWidget, QLabel, QPushButton, QMessageBox
+        
 
-# def dialog():
-#     mbox = QMessageBox()
+# create pyqt5 app
+App = q.QApplication(sys.argv)
 
-#     mbox.setText("Your allegiance has been noted")
-#     mbox.setDetailedText("You are now a disciple and subject of the all-knowing Guru")
-#     mbox.setStandardButtons(QMessageBox.Ok | QMessageBox.Cancel)
-            
-#     mbox.exec_()
+# create the instance of our Window
+window = Window()
 
-# if __name__ == "__main__":
-#     app = QApplication(sys.argv)
-#     w = QWidget()
-#     w.resize(300,300)
-#     w.setWindowTitle("Guru99")
-    
-#     label = QLabel(w)
-#     label.setText("Behold the Guru, Guru99")
-#     label.move(100,130)
-#     label.show()
-
-#     btn = QPushButton(w)
-#     btn.setText('Beheld')
-#     btn.move(110,150)
-#     btn.show()
-#     btn.clicked.connect(dialog)
-
-    
-#     w.show()
-#     sys.exit(app.exec_())
+# start the app
+sys.exit(App.exec())
