@@ -58,19 +58,6 @@ KEY_FREQUENCIES = {}
 KEY_FREQUENCIES.update(white_keys)
 KEY_FREQUENCIES.update(black_keys)
 
-
-def update():
-    index = 0
-    for group in [black_group1, black_group2, black_group3, black_group4, black_group5, black_group6]:
-        n = len(group)
-        # Map keys in this group to the next n frequencies from black_frequencies
-        black_keys.update(dict(zip(group, black_frequencies[index:index+n])))
-        index += n
-    white_keys.update(dict(zip(white_lower_keys, white_frequencies[:10])))
-    white_keys.update(dict(zip(white_upper_keys, white_frequencies[10:])))
-    KEY_FREQUENCIES.update(white_keys)
-    KEY_FREQUENCIES.update(black_keys)
-
 # ----------------------------
 # Waveform Generation
 # ----------------------------
@@ -112,13 +99,9 @@ def on_press(key):
     if key == keyboard.Key.up:
         baseFrequency = baseFrequency*(pow(2,(1/12)))
         print(baseFrequency)
-        update()
-        listener = keyboard.Listener(on_press=on_press, on_release=on_release, suppress=True)
     if key == keyboard.Key.down:
         baseFrequency = baseFrequency/(pow(2,(1/12)))
         print(baseFrequency)
-        update()
-        listener = keyboard.Listener(on_press=on_press, on_release=on_release, suppress=True)
     try:
         if hasattr(key, 'char'):
             k = key.char.lower()
