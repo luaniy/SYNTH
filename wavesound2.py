@@ -46,20 +46,12 @@ black_frequencies = [
 ]
 
 # Black keys: groups defined as follows
-black_group1 = list("sd")           # 2 keys: for C#3 and D#3
-black_group2 = list("ghj")          # 3 keys: for F#3, G#3, A#3
-black_group3 = list("l;")           # 2 keys: for C#4, D#4
-black_group4 = list("234")          # 3 keys: for F#4, G#4, A#4
-black_group5 = list("67")           # 2 keys: for C#5, D#5
-black_group6 = list("90-")          # 3 keys: for F#5, G#5, A#5
+black_lower_keys = list("sdghjl;") # 7 keys
+black_upper_keys = list("2346790-") # 8 keys
 
 black_keys = {}
-index = 0
-for group in [black_group1, black_group2, black_group3, black_group4, black_group5, black_group6]:
-    n = len(group)
-    # Map keys in this group to the next n frequencies from black_frequencies
-    black_keys.update(dict(zip(group, black_frequencies[index:index+n])))
-    index += n
+black_keys.update(dict(zip(black_lower_keys, black_frequencies[:10])))
+black_keys.update(dict(zip(black_upper_keys, black_frequencies[7:])))
 
 # Combine all key mappings into one dictionary
 KEY_FREQUENCIES = {}
