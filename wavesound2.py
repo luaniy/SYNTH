@@ -11,14 +11,20 @@ DURATION = 200.0          # Duration of precomputed waveform (seconds)
 FADE_IN_DURATION = 0.05   # seconds
 FADE_OUT_DURATION = 0.1   # seconds
 
+baseFrequency = 130.81
+
+def nF(noteNum):
+    freq = baseFrequency*pow(pow(2,(1/12)),noteNum)
+    return freq
+
 # White key frequencies (3 octaves, 7 keys per octave = 21 keys)
 white_frequencies = [
     # Octave 1 (C3 - B3)
-    130.81, 146.83, 164.81, 174.61, 196.00, 220.00, 246.94,
+    nF(0), nF(2), nF(4), nF(5), nF(7), nF(9), nF(11),
     # Octave 2 (C4 - B4)
-    261.63, 293.66, 329.63, 349.23, 392.00, 440.00, 493.88,
-    # Octave 3 (C5 - B5)
-    523.25, 587.33, 659.25, 698.46, 783.99, 880.00, 987.77, 1046.50
+    nF(12), nF(14), nF(16), nF(17), nF(19), nF(21), nF(23),
+    # Octave 3 (C5 - B5)zz
+    nF(24), nF(26), nF(28), nF(29), nF(31), nF(33), nF(35), nF(36)
 ]
 
 # White keys: lower row from "z" to "/" (10 keys) and upper row from "q" to "[" (11 keys)
@@ -32,11 +38,11 @@ white_keys.update(dict(zip(white_upper_keys, white_frequencies[10:])))
 # Black key frequencies (3 octaves, 5 black keys per octave = 15 keys)
 black_frequencies = [
     # Octave 1 (C#3, D#3, F#3, G#3, A#3)
-    138.59, 155.56, 185.00, 207.65, 233.08,
+    nF(1), nF(3), nF(6), nF(8), nF(10),
     # Octave 2 (C#4, D#4, F#4, G#4, A#4)
-    277.18, 311.13, 369.99, 415.30, 466.16,
+    nF(13), nF(15), nF(18), nF(20), nF(22),
     # Octave 3 (C#5, D#5, F#5, G#5, A#5)
-    554.37, 622.25, 739.99, 830.61, 932.33
+    nF(25), nF(27), nF(30), nF(32), nF(34)
 ]
 
 # Black keys: groups defined as follows
@@ -59,6 +65,19 @@ for group in [black_group1, black_group2, black_group3, black_group4, black_grou
 KEY_FREQUENCIES = {}
 KEY_FREQUENCIES.update(white_keys)
 KEY_FREQUENCIES.update(black_keys)
+
+
+def update():
+    index = 0
+    for group in [black_group1, black_group2, black_group3, black_group4, black_group5, black_group6]:
+        n = len(group)
+        # Map keys in this group to the next n frequencies from black_frequencies
+        black_keys.update(dict(zip(group, black_frequencies[index:index+n])))
+        index += n
+    white_keys.update(dict(zip(white_lower_keys, white_frequencies[:10])))
+    white_keys.update(dict(zip(white_upper_keys, white_frequencies[10:])))
+    KEY_FREQUENCIES.update(white_keys)
+    KEY_FREQUENCIES.update(black_keys)
 
 # ----------------------------
 # Waveform Generation
@@ -93,11 +112,21 @@ precomputed_waves = { key: generate_cos_wave(freq, SAMPLE_RATE, DURATION, FADE_I
 active_notes = {}
 
 def on_press(key):
-    global active_notes, listener
+    global active_notes, listener, baseFrequency
     # Allow ESC to exit the program
     if key == keyboard.Key.esc:
         listener.stop()
         return False
+    if key == keyboard.Key.up:
+        baseFrequency = baseFrequency*(pow(2,(1/12)))
+        print(baseFrequency)
+        update()
+        listener = keyboard.Listener(on_press=on_press, on_release=on_release, suppress=True)
+    if key == keyboard.Key.down:
+        baseFrequency = baseFrequency/(pow(2,(1/12)))
+        print(baseFrequency)
+        update()
+        listener = keyboard.Listener(on_press=on_press, on_release=on_release, suppress=True)
     try:
         if hasattr(key, 'char'):
             k = key.char.lower()
