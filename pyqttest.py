@@ -27,16 +27,18 @@ class Window(q.QMainWindow):
         label = q.QLabel("Synth", self)
         # setting geometry to the label
         label.setGeometry(100, 150, 200, 50)
+        sine = q.QAction("Sine")
+        if keyPressEvent.key()==Qt.Key_Z:
+            sine.triggered.connect(lambda: label.setText("Sine"))
 
     def keyPressEvent(self, e):
         
-        sine = q.QAction("Sine")
+        
         square = q.QAction("Square")
         triangle = q.QAction("Triangle")
         sawtooth = q.QAction("Sawtooth")
 
-        if e.key()==Qt
-        sine.triggered.connect(lambda: label.setText("Sine"))
+        
 
         square.triggered.connect(lambda: label.setText("Square"))
 
